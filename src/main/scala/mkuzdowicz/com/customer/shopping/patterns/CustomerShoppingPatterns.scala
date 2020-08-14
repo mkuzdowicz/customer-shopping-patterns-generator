@@ -1,6 +1,10 @@
 package mkuzdowicz.com.customer.shopping.patterns
 
 import mkuzdowicz.com.customer.shopping.patterns.model.CustomerShoppingPattern
+import org.apache.spark.sql.catalyst.ScalaReflection
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.{Dataset, SparkSession}
 
 case class InputPaths(customers: String, products: String, transactions: String)
 
@@ -12,6 +16,8 @@ class CustomerShoppingPatterns(config: PipelineConfig) {
 
   def loadDataSets(spark: SparkSession): (Dataset[model.Customer],
     Dataset[model.Product], Dataset[model.Transaction]) = {
+
+    import spark.implicits._
 
     val customersDS = spark.read
       .option("header", "true")
@@ -37,6 +43,8 @@ class CustomerShoppingPatterns(config: PipelineConfig) {
                        customers: Dataset[model.Customer],
                        products: Dataset[model.Product],
                        transactions: Dataset[model.Transaction]) = {
+
+    import spark.implicits._
 
     val customerProduct: Dataset[(String, String)] = transactions.flatMap {
       t =>
