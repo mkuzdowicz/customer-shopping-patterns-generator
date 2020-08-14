@@ -1,0 +1,7 @@
+target
+.idea
+.DS_Store
+src/test/resources/input_data
+src/test/resources/output_data
+src/main/resources/output_data/
+
