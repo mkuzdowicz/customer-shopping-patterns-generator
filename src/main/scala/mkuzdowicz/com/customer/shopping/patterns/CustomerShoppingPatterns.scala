@@ -51,11 +51,11 @@ class CustomerShoppingPatterns(config: PipelineConfig) {
         t.basket.map(b => (t.customer_id, b.product_id))
     }
 
-    val grouped = customerProduct
+    val rawPatterns = customerProduct
       .groupBy($"_1".alias("customer_id"), $"_2".alias("product_id"))
       .agg(count("*").alias("purchase_count"))
 
-    grouped.join(customers, "customer_id")
+    rawPatterns.join(customers, "customer_id")
       .join(products, "product_id")
       .select($"customer_id", $"loyalty_score", $"product_id",
         $"product_category", $"purchase_count")
